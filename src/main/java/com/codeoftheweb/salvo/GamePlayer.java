@@ -1,6 +1,9 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class GamePlayer {
@@ -8,16 +11,26 @@ public class GamePlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "player_id")
-    private Player player;
+    @JsonIgnore
+    private Player playerID;
 
-    @ManyToOne (fetch = FetchType.EAGER)
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "game_id")
-    private Game game;
+    @JsonIgnore
+    private Game gameID;
 
     public GamePlayer(){}
+
+    public GamePlayer( Player playerID, Game gameID) {
+
+        this.date = new Date();
+        this.playerID = playerID;
+        this.gameID = gameID;
+    }
 
     public long getId() {
         return id;
@@ -27,19 +40,5 @@ public class GamePlayer {
         this.id = id;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
 }

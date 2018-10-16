@@ -9,19 +9,19 @@ import java.util.Set;
 @Entity
 public class Game {
 
-    @CreatedDate
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Date date;
     private long id;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    private Date date;
+
+    @OneToMany(mappedBy="gameID", fetch=FetchType.LAZY)
     Set<GamePlayer> gamePlayerSet;
 
-    public void addGamePlayer(GamePlayer gamePlayer) {
-        gamePlayer.setGame(this);
-        gamePlayerSet.add(gamePlayer);
-    }
+//    public void addGamePlayer(GamePlayer gamePlayer) {
+//        gamePlayer.setGame(this);
+//        gamePlayerSet.add(gamePlayer);
+//    }
 
     public Game () {
         this.date = new Date();

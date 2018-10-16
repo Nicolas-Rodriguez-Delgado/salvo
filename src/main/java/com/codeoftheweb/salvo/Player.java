@@ -13,14 +13,14 @@ public class Player {
         private String userName;
         private String email;
 
-    @OneToMany(mappedBy="player_id", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="playerID", fetch=FetchType.LAZY)
     Set<GamePlayer> gamePlayerSet;
 
 
-    public void addGamePlayer(GamePlayer gamePlayer) {
-        gamePlayer.setPlayer(this);
-        gamePlayerSet.add(gamePlayer);
-    }
+//    public void addGamePlayer(GamePlayer gamePlayer) {
+//        gamePlayer.setPlayer(this);
+//        gamePlayerSet.add(gamePlayer);
+//    }
 
     public Player(String userName, String email) {
         this.userName = userName;

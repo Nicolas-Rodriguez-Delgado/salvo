@@ -11,10 +11,10 @@ import java.util.List;
 public class PlayerController {
 
     @Autowired
-    PlayerRepository playerRepo;
+    PlayerRepository playerRepository;
 
     @GetMapping
     public List<Player> findThemAll(){
-        return playerRepo.findAll();
+        return playerRepository.findAll();
     }
 }
