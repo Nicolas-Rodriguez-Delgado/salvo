@@ -1,7 +1,5 @@
 package com.codeoftheweb.salvo;
 
-import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -13,25 +11,21 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Date date;
+    private long date;
 
     @OneToMany(mappedBy="gameID", fetch=FetchType.LAZY)
     Set<GamePlayer> gamePlayerSet;
 
-//    public void addGamePlayer(GamePlayer gamePlayer) {
-//        gamePlayer.setGame(this);
-//        gamePlayerSet.add(gamePlayer);
-//    }
 
     public Game () {
-        this.date = new Date();
+        this.date = new Date().getTime();
     }
 
-    public Date getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(long date) {
         this.date = date;
     }
 

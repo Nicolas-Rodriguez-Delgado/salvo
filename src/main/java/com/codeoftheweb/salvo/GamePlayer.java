@@ -25,7 +25,15 @@ public class GamePlayer {
 
     public GamePlayer(){}
 
-    public GamePlayer( Player playerID, Game gameID) {
+    public Player getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(Player playerID) {
+        this.playerID = playerID;
+    }
+
+    public GamePlayer(Player playerID, Game gameID) {
 
         this.date = new Date();
         this.playerID = playerID;
