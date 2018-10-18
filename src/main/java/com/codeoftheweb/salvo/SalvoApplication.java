@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootApplication
 public class SalvoApplication {
 
@@ -15,7 +18,8 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData (PlayerRepository playerRepository,
 									   GameRepository gameRepository,
-									   GamePlayerRepository gamePlayerRepository) {
+									   GamePlayerRepository gamePlayerRepository,
+									   ShipRepository shipRepository) {
 		return (args) -> {
 			// save a couple of customers
 //			playerRepository.save(new Player ("Jack", "javaisworse@help.com"));
@@ -50,6 +54,13 @@ public class SalvoApplication {
 			GamePlayer gp2 = new GamePlayer(p2, g1);
 			gamePlayerRepository.save(gp2);
 
+			List<String> loc1 = Arrays.asList("A1","A2","A3","A4","A5");
+
+			Ship s1 = new Ship("carrier", loc1);
+
+			gp1.addShip(s1);
+
+			shipRepository.save(s1);
 		};
 	}
 

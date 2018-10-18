@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 public class GamePlayer {
@@ -22,6 +23,9 @@ public class GamePlayer {
     @JoinColumn (name = "game_id")
     @JsonIgnore
     private Game gameID;
+
+    @OneToMany (mappedBy = "gameplayerID", fetch = FetchType.EAGER)
+    Set<Ship> shipSet;
 
     public GamePlayer(){}
 
@@ -46,6 +50,13 @@ public class GamePlayer {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void addShip (Ship ship ) {
+
+        ship.getGameplayerID();
+        shipSet.add(ship);
+
     }
 
 

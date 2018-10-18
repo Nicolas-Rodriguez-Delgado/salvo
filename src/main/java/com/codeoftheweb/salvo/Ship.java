@@ -1,6 +1,10 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Ship {
@@ -12,8 +16,19 @@ public class Ship {
     private String type;
 
     @ElementCollection
-    private String locations;
+    @Column(name = "location")
+    private List<String> location;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gameplayer_id")
+    @JsonIgnore
+    private GamePlayer gameplayerID;
+
+
+    public Ship(String type, List<String> location ) {
+        this.type = type;
+        this.location = location;
+    }
 
     public long getId() {
         return id;
@@ -28,11 +43,19 @@ public class Ship {
         this.type = type;
     }
 
-    public String getLocations() {
-        return locations;
+    public List<String> getLocation() {
+        return location;
     }
 
-    public void setLocations(String locations) {
-        this.locations = locations;
+    public void setLocation(List<String> location) {
+        this.location = location;
+    }
+
+    public GamePlayer getGameplayerID() {
+        return gameplayerID;
+    }
+
+    public void setGameplayerID(GamePlayer gameplayerID) {
+        this.gameplayerID = gameplayerID;
     }
 }
