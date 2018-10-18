@@ -25,10 +25,14 @@ public class Ship {
     private GamePlayer gameplayerID;
 
 
+
+
     public Ship(String type, List<String> location ) {
         this.type = type;
         this.location = location;
     }
+
+    public Ship () {}
 
     public long getId() {
         return id;
