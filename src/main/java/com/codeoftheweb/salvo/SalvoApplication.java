@@ -55,12 +55,28 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gp2);
 
 			List<String> loc1 = Arrays.asList("A1","A2","A3","A4","A5");
+			List<String> loc2 = Arrays.asList("A8","B8","C8","D8");
+			List<String> loc3 = Arrays.asList("F1","F2","F3");
+			List<String> loc4 = Arrays.asList("D5","E5","F5");
+			List<String> loc5 = Arrays.asList("B3","C3");
 
 			Ship s1 = new Ship("carrier", loc1);
+			Ship s2 = new Ship("battleship", loc2);
+			Ship s3 = new Ship("submarine", loc3);
+			Ship s4 = new Ship("destroyer", loc4);
+			Ship s5 = new Ship("patrol boat", loc5);
 
 			gp1.addShip(s1);
+			gp1.addShip(s2);
+			gp1.addShip(s3);
+			gp1.addShip(s4);
+			gp1.addShip(s5);
 
 			shipRepository.save(s1);
+			shipRepository.save(s2);
+			shipRepository.save(s3);
+			shipRepository.save(s4);
+			shipRepository.save(s5);
 		};
 	}
 

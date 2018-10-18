@@ -13,8 +13,10 @@ public class Game {
 
     private long date;
 
+
+
     @OneToMany(mappedBy="gameID", fetch=FetchType.LAZY)
-    Set<GamePlayer> gamePlayerSet;
+    private Set<GamePlayer> gamePlayerSet;
 
 
     public Game () {
@@ -31,6 +33,10 @@ public class Game {
 
     public long getId() {
         return id;
+    }
+
+    public Set<GamePlayer> getGamePlayerSet() {
+        return gamePlayerSet;
     }
 
 

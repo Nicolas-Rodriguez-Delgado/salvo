@@ -14,12 +14,19 @@ public class GamePlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+
+
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "player_id")
     @JsonIgnore
     private Player playerID;
+
+    public Game getGameID() {
+        return gameID;
+    }
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "game_id")
@@ -48,6 +55,14 @@ public class GamePlayer {
 
     public long getId() {
         return id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Set<Ship> getShipSet() {
+        return shipSet;
     }
 
     public void setId(long id) {
