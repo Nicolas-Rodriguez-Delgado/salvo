@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo;
 
-
 import javax.persistence.*;
 import java.util.Set;
 

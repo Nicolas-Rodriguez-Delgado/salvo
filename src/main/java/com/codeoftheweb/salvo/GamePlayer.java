@@ -3,10 +3,7 @@ package com.codeoftheweb.salvo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -16,27 +13,24 @@ public class GamePlayer {
     private long id;
 
 
-
     private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn (name = "player_id")
+    @JoinColumn(name = "player_id")
     @JsonIgnore
     private Player playerID;
 
-    public Game getGameID() {
-        return gameID;
-    }
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "game_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game_id")
     @JsonIgnore
     private Game gameID;
 
-    @OneToMany (mappedBy = "gameplayerID", fetch = FetchType.EAGER)
-    Set<Ship> shipSet = new HashSet<>();
+    @OneToMany(mappedBy = "gameplayerID", fetch = FetchType.EAGER)
+    List<Ship> shipSet = new ArrayList<>();
 
-    public GamePlayer(){}
+    public GamePlayer() {
+    }
 
     public Player getPlayerID() {
         return playerID;
@@ -61,7 +55,7 @@ public class GamePlayer {
         return date;
     }
 
-    public Set<Ship> getShipSet() {
+    public List<Ship> getShipSet() {
         return shipSet;
     }
 
@@ -69,12 +63,18 @@ public class GamePlayer {
         this.id = id;
     }
 
-    public void addShip (Ship ship ) {
+    public void addShip(Ship ship) {
 
         ship.setGameplayerID(this);
         shipSet.add(ship);
 
     }
+    public Game getGameID() {
+        return gameID;
+    }
+
 
 
 }
+
+

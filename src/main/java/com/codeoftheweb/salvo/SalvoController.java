@@ -14,15 +14,19 @@ import static java.util.stream.Collectors.toList;
 public class SalvoController {
 
     @Autowired
-    private GameRepository GameRepo;
+    private GameRepository gameRepo;
     @Autowired
     private GamePlayerRepository GamePlayerRepo;
+    @Autowired
+    ShipRepository shipRepository;
 
 
     @RequestMapping("/games")
     @GetMapping
     public List<Object> findThemAll() {
-        return GameRepo.findAll().stream()
+        return gameRepo
+                .findAll()
+                .stream()
                 .map(game -> gameMap(game))
                 .collect(toList());
     }
@@ -38,7 +42,7 @@ public class SalvoController {
 
 
     private Map<String, Object> gameplayerMap (GamePlayer gamePlayer) {
-        return new HashMap<String, Object>(){{
+        return new LinkedHashMap<String, Object>(){{
             put("id", gamePlayer.getId());
             put("player", playerMap(gamePlayer.getPlayerID()));
         }};
@@ -59,32 +63,39 @@ public class SalvoController {
                 .collect(toList());
     }
 
-    @GetMapping("/game_view/{id}")
-    public Object getInfo (@PathVariable long id) {
-        return GamePlayerRepo.findById(id);
+
+
+
+    @RequestMapping("/game_view/{id}")
+    public Map<String, Object> gameView (@PathVariable Long id) {
+         GamePlayer gg = GamePlayerRepo.findById(id).orElse(null);
+        if(gg != null) {
+            return gamePMap(gg);
+        }else {
+            return null;
+        }
+
     }
 
-
-
-
-
-    private Map<String, Object> shipMap (Ship ship) {
-        Map<String, Object> shipmap = new LinkedHashMap<String, Object>();
-        shipmap.put("type", ship.getType());
-        shipmap.put("locations", ship.getLocation());
-        return shipmap;
-    }
 
     private Map<String, Object> gamePMap (GamePlayer gamePlayer) {
         Map<String, Object> gamePmap = new LinkedHashMap<String, Object>();
-        gamePmap.put("id", gamePlayer.getId());
+        gamePmap.put("id", gamePlayer.getGameID().getId());
         gamePmap.put("date", gamePlayer.getDate());
-        gamePmap.put("gamplayers", gameplayerSet(gamePlayer.getGameID().getGamePlayerSet()));
-        gamePmap.put("ships", gamePlayer.getShipSet());
+        gamePmap.put("gameplayer", gameplayerSet(gamePlayer.getGameID().getGamePlayerSet()));
+        gamePmap.put("ships", ships(gamePlayer.getShipSet()));
         return gamePmap;
     }
 
-    public List<Map<String, Object>> shipSet (Set<Ship> ship) {
+    private Map<String, Object> shipMap (Ship gp) {
+
+        Map<String, Object> sm = new LinkedHashMap<>();
+        sm.put("type", gp.getType());
+        sm.put("locations", gp.getLocation());
+        return sm;
+    }
+
+    public List<Map<String, Object>> ships (List<Ship> ship) {
         return ship.stream().map(loc -> shipMap(loc)).collect(toList());
     }
 
