@@ -19,7 +19,7 @@ public class Ship {
     private List<String> location;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "gameplayer_id")
+    @JoinColumn(name = "g")
     @JsonIgnore
     private GamePlayer gameplayerID;
 

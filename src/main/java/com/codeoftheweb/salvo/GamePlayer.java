@@ -26,8 +26,11 @@ public class GamePlayer {
     @JsonIgnore
     private Game gameID;
 
-    @OneToMany(mappedBy = "gameplayerID", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "gameplayerID", fetch = FetchType.LAZY)
     List<Ship> shipSet = new ArrayList<>();
+
+    @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    List<Salvo> salvoSet = new ArrayList<>();
 
     public GamePlayer() {
     }
@@ -59,6 +62,10 @@ public class GamePlayer {
         return shipSet;
     }
 
+    public List<Salvo> getSalvoSet() {
+        return salvoSet;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -69,10 +76,16 @@ public class GamePlayer {
         shipSet.add(ship);
 
     }
+
+    public void addSalvo(Salvo salvo){
+
+        salvo.setGamePlayer(this);
+        salvoSet.add(salvo);
+    }
+
     public Game getGameID() {
         return gameID;
     }
-
 
 
 }

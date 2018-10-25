@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class SalvoApplication {
 	public CommandLineRunner initData (PlayerRepository playerRepository,
 									   GameRepository gameRepository,
 									   GamePlayerRepository gamePlayerRepository,
-									   ShipRepository shipRepository) {
+									   ShipRepository shipRepository,
+									   SalvoRepository salvoRepository) {
 		return (args) -> {
 			// save a couple of customers
 //
@@ -61,6 +63,8 @@ public class SalvoApplication {
 			List<String> loc9 = Arrays.asList("F5","G5","H5");
 			List<String> loc10 = Arrays.asList("B3","C3");
 
+
+
 			Ship s1 = new Ship("carrier", loc1);
 			Ship s2 = new Ship("battleship", loc2);
 			Ship s3 = new Ship("submarine", loc3);
@@ -93,6 +97,25 @@ public class SalvoApplication {
 			shipRepository.save(s8);
 			shipRepository.save(s9);
 			shipRepository.save(s10);
+
+			List<String> sloc1 = Arrays.asList("A3","A8","B10");
+			List<String> sloc2 = Arrays.asList("B3","H8","D5");
+			List<String> sloc3 = Arrays.asList("G7","J3","I5");
+
+			Salvo sl1 = new Salvo(1, sloc1);
+			Salvo sl2 = new Salvo(1,sloc2);
+			Salvo sl3 = new Salvo(2,sloc3);
+
+			gp1.addSalvo(sl1);
+			gp2.addSalvo(sl2);
+			gp1.addSalvo(sl3);
+
+
+			salvoRepository.save(sl1);
+			salvoRepository.save(sl2);
+			salvoRepository.save(sl3);
+
+
 
 		};
 	}

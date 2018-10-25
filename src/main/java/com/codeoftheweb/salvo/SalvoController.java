@@ -84,6 +84,8 @@ public class SalvoController {
         gamePmap.put("date", gamePlayer.getDate());
         gamePmap.put("gameplayer", gameplayerSet(gamePlayer.getGameID().getGamePlayerSet()));
         gamePmap.put("ships", ships(gamePlayer.getShipSet()));
+        gamePmap.put("salvoes", salvoes(gamePlayer.getSalvoSet()));
+
         return gamePmap;
     }
 
@@ -99,5 +101,16 @@ public class SalvoController {
         return ship.stream().map(loc -> shipMap(loc)).collect(toList());
     }
 
+    private Map<String, Object> salvoMap (Salvo slv){
+
+        Map<String, Object> sl = new LinkedHashMap<>();
+        sl.put("turn" , slv.getTurn());
+        sl.put("locations", slv.getLocations());
+        return sl;
+    }
+
+    public List<Map<String, Object>> salvoes (List<Salvo> salvos) {
+        return salvos.stream().map(sl -> salvoMap(sl)).collect(toList());
+    }
 
 }
