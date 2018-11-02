@@ -87,6 +87,38 @@ public class GamePlayer {
         return gameID;
     }
 
+    public List<Salvo> getOpponentSalvo (GamePlayer gamePlayer) {
+     return this.getGameID().getOpponent(gamePlayer).getSalvoSet();
+    }
+
+    public List<Ship> getOpponentShip (GamePlayer gamePlayer) {
+        return this.getGameID().getOpponent(gamePlayer).getShipSet();
+    }
+
+    public List<String> salvoList (GamePlayer gamePlayer) {
+        List <String> sL = new ArrayList<>();
+        for (Salvo salvo: gamePlayer.getSalvoSet()){
+            for (String location: salvo.getLocations()){
+                sL.add(location);
+            }
+        }
+        return sL;
+    }
+
+    public List<String> opponentShipList (GamePlayer gamePlayer){
+        List<String> oSL = new ArrayList<>();
+        for (Ship ship: gamePlayer.getOpponentShip(gamePlayer)){
+            for (String location: ship.getLocation()){
+                oSL.add(location);
+            }
+        }
+        return oSL;
+    }
+
+    public Score getScore() {
+
+        return playerID.getScore(gameID);
+    }
 
 }
 

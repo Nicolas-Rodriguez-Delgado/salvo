@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -13,13 +14,11 @@ public class Player {
         private String email;
 
     @OneToMany(mappedBy="playerID", fetch=FetchType.LAZY)
-    Set<GamePlayer> gamePlayerSet;
+    private Set<GamePlayer> gamePlayerSet;
 
+    @OneToMany (mappedBy = "player", fetch = FetchType.LAZY)
+    private Set<Score> playerScore;
 
-//    public void addGamePlayer(GamePlayer gamePlayer) {
-//        gamePlayer.setPlayer(this);
-//        gamePlayerSet.add(gamePlayer);
-//    }
 
     public Player(String userName, String email) {
         this.userName = userName;
@@ -49,4 +48,13 @@ public class Player {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Set<Score> getPlayerScore() {
+        return playerScore;
+    }
+
+    public Score getScore(Game game){
+        return playerScore.stream().filter(score -> score.getGame().equals(game)).findFirst().orElse(null);
+    }
+
 }

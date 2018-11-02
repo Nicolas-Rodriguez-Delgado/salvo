@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -17,6 +18,9 @@ public class Game {
 
     @OneToMany(mappedBy="gameID", fetch=FetchType.LAZY)
     private Set<GamePlayer> gamePlayerSet;
+
+    @OneToMany (mappedBy = "game", fetch = FetchType.LAZY)
+    private Set<Score> gameScore;
 
 
     public Game () {
@@ -39,6 +43,19 @@ public class Game {
         return gamePlayerSet;
     }
 
+    public Set<Score> getGameScore() {
+        return gameScore;
+    }
+
+    public GamePlayer getOpponent (GamePlayer currentGP) {
+        for (GamePlayer otherGP : this.gamePlayerSet) {
+            if (currentGP.getId() != otherGP.getId()) {
+                return otherGP;
+            }
+        }
+        return null;
+
+    }
 
 
 }

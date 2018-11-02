@@ -64,46 +64,35 @@ function putShips(myData) {
 
 function putSalvoes(myData2) {
 
-    var shipLocations = [];
-    var opSalvo = [];
-    var hits = [];
-
-    for (let k = 0; k < myData2.salvoes.length; k++) {
+    for (let k =0; k < myData2.salvoes.length; k++){
 
         var locSalvo = myData2.salvoes[k].locations;
 
         locSalvo.forEach(loc => {
             var square = document.getElementById("secondTable").querySelector(`.${loc}`);
-            square.style.backgroundColor = "green";
-            // square.classList.add("ship")
+            square.style.backgroundColor = "green"; })
+
+    }
+
+    for (let j = 0; j < myData2.ships.length; j++){
+
+        var locShips = myData2.ships[j].locations;
+
+        for (let l = 0; l < myData2.OpponentSalvoes.length; l++){
+
+            var locOpSalvo = myData2.OpponentSalvoes[l].locations;
+
+        locOpSalvo.forEach(loc => {
+            var square = document.getElementById("firstTable").querySelector(`.${loc}`);
+
+            if (loc == locShips ){
+                square.style.backgroundColor = "red";
+
+            }else {
+                square.style.backgroundColor = "green";
+            }
         })
-
     }
-
-    for (let j = 0; j < myData2.ships.length; j++) {
-
-        myData2.ships[j].locations.forEach(el => shipLocations.push(el));
-    }
-
-    for (let l = 0; l < myData2.OpponentSalvoes.length; l++) {
-
-        myData2.OpponentSalvoes[l].locations.forEach(el => opSalvo.push(el));
-
-    }
-
-
-    opSalvo.forEach((loca) => shipLocations.forEach((loca2) => {
-        var square = document.getElementById("firstTable").querySelector(`.${loca}`);
-
-        if (loca == loca2) {
-            square.style.backgroundColor = "red";
-        }else {
-            // square.style.backgroundColor = "green";
-            console.log("hello");
-        }
-
-    }))
-    console.log(hits);
 }
 
 function putHits(myData2) {
@@ -122,4 +111,3 @@ function putHits(myData2) {
 
     }
 }
-

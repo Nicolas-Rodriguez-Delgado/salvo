@@ -18,7 +18,9 @@ public class SalvoController {
     @Autowired
     private GamePlayerRepository GamePlayerRepo;
     @Autowired
-    ShipRepository shipRepository;
+    private ScoreRepository scoreRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
 
     @RequestMapping("/games")
@@ -37,6 +39,7 @@ public class SalvoController {
         gamemap.put("id", game.getId());
         gamemap.put("date", game.getDate());
         gamemap.put("gamplayers", gameplayerSet(game.getGamePlayerSet()));
+        gamemap.put("scores", game.getGameScore());
         return gamemap;
     }
 
@@ -65,7 +68,6 @@ public class SalvoController {
 
 
 
-
     @RequestMapping("/game_view/{id}")
     public Map<String, Object> gameView (@PathVariable Long id) {
          GamePlayer gg = GamePlayerRepo.findById(id).orElse(null);
@@ -74,7 +76,6 @@ public class SalvoController {
         }else {
             return null;
         }
-
     }
 
 
@@ -85,6 +86,8 @@ public class SalvoController {
         gamePmap.put("gameplayer", gameplayerSet(gamePlayer.getGameID().getGamePlayerSet()));
         gamePmap.put("ships", ships(gamePlayer.getShipSet()));
         gamePmap.put("salvoes", salvoes(gamePlayer.getSalvoSet()));
+        gamePmap.put("OpponentSalvoes", salvoes(gamePlayer.getOpponentSalvo(gamePlayer)));
+        gamePmap.put("salvoHits", hits(gamePlayer));
 
         return gamePmap;
     }
@@ -104,6 +107,7 @@ public class SalvoController {
     private Map<String, Object> salvoMap (Salvo slv){
 
         Map<String, Object> sl = new LinkedHashMap<>();
+        sl.put("id", slv.getGamePlayer().getPlayerID().getId());
         sl.put("turn" , slv.getTurn());
         sl.put("locations", slv.getLocations());
         return sl;
@@ -112,5 +116,42 @@ public class SalvoController {
     public List<Map<String, Object>> salvoes (List<Salvo> salvos) {
         return salvos.stream().map(sl -> salvoMap(sl)).collect(toList());
     }
+
+    public List<String> hits (GamePlayer gamePlayer) {
+        List<String> hitList =  new ArrayList<>();
+        for (String shipLocation: gamePlayer.opponentShipList(gamePlayer)){
+            for(String salvoLocation: gamePlayer.salvoList(gamePlayer)){
+                if (salvoLocation == shipLocation){
+                    if(!hitList.contains(shipLocation)){
+                        hitList.add(shipLocation);
+                    }
+                }
+            }
+        }
+        return hitList;
+    }
+
+    @RequestMapping("/scores")
+    @GetMapping
+    public List<Object> findScores() {
+        return playerRepository
+                .findAll()
+                .stream()
+                .map(player -> scoreMap(player))
+                .collect(toList());
+    }
+
+
+
+
+
+    private Map<String,Object> scoreMap (Player player){
+        Map<String, Object> scoremap = new LinkedHashMap<>();
+        scoremap.put("player", player.getEmail());
+        scoremap.put("scores", player.getPlayerScore());
+        return scoremap;
+    }
+
+
 
 }
