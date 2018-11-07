@@ -10,5 +10,6 @@ import java.util.List;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
      Player findByUserName (String userName);
+     Player findByEmail (String email);
 
 }
