@@ -57,7 +57,7 @@ function putShips(myData) {
         ls.forEach(el => {
 
             var sc = document.getElementById("firstTable").querySelector(`.${el}`);
-            sc.style.backgroundColor = "gray";
+            sc.classList.add("ship");
         });
     }
 }
@@ -96,10 +96,10 @@ function putSalvoes(myData2) {
         var square = document.getElementById("firstTable").querySelector(`.${loca}`);
 
         if (loca == loca2) {
-            square.style.backgroundColor = "red";
+            square.classList.add("hit");
+            console.log(loca);
         }else {
-            // square.style.backgroundColor = "green";
-            console.log("hello");
+            square.classList.add("noHit");
         }
 
     }))

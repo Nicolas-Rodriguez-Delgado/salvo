@@ -1,5 +1,10 @@
 package com.codeoftheweb.salvo;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import javax.persistence.*;
 import java.util.Optional;
 import java.util.Set;
@@ -19,10 +24,15 @@ public class Player {
     @OneToMany (mappedBy = "player", fetch = FetchType.LAZY)
     private Set<Score> playerScore;
 
+    private String password;
 
-    public Player(String userName, String email) {
+    private User user;
+
+
+    public Player(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
+        this.password = password;
     }
 
     public Player() {
@@ -56,5 +66,14 @@ public class Player {
     public Score getScore(Game game){
         return playerScore.stream().filter(score -> score.getGame().equals(game)).findFirst().orElse(null);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 
 }

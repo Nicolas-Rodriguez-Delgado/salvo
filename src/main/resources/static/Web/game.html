@@ -8,7 +8,7 @@
     <title>Games</title>
 
     <style>
-
+        html {background-image: url("static/sea.jpg")}
         thead {color:white;}
         tbody {color:white;}
 
@@ -23,7 +23,7 @@
             justify-content: right;
         }
 
-        table, th, td {
+        th, td {
             border: 1px solid black;
         }
         th, td {
@@ -31,6 +31,15 @@
             width: 35px;
             height: 35px;
             background-color: cornflowerblue;
+        }
+        .hit {
+            background-color: red; !important;
+        }
+        .noHit {
+            background-color: green;
+        }
+        .ship {
+            background-color: gray;
         }
         </style>
 </head>
@@ -51,9 +60,11 @@
     <thead id="th2">
 
     </thead>
-    <tbody id="tb2">
+    <tbody id="tb2" >
 
     </tbody>
+
+    <p class ="hit"></p>
 
 </table>
 

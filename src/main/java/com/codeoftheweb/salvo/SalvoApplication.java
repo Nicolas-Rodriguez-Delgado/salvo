@@ -1,10 +1,30 @@
 package com.codeoftheweb.salvo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,13 +46,13 @@ public class SalvoApplication {
 			// save a couple of customers
 //
 
-			Player p1 = new Player("Jack", "javaisworse@help.com");
+			Player p1 = new Player("Jack", "javaisworse@help.com", "jack123");
 			playerRepository.save(p1);
-			Player p2 = new Player("Kim", "basinger@basinger.com");
+			Player p2 = new Player("Kim", "basinger@basinger.com", "kim123");
 			playerRepository.save(p2);
-			Player p3 = new Player("David", "123@123.com");
+			Player p3 = new Player("David", "123@123.com", "david123");
 			playerRepository.save(p3);
-			Player p4 = new Player("Michelle", "pfeiffer@mich.com");
+			Player p4 = new Player("Michelle", "pfeiffer@mich.com", "gatuela123");
 			playerRepository.save(p4);
 
 
@@ -136,3 +156,60 @@ public class SalvoApplication {
 	}
 
 }
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+	@Service
+	public class MyUserDetailsService implements UserDetailsService {
+
+		@Autowired
+		private PlayerRepository playerRepository;
+
+		@Override
+		public UserDetails loadUserByUsername(String username) {
+			Player player = playerRepository.findByUserName(username);
+			if (player == null) {
+				throw new UsernameNotFoundException(username);
+			}
+			return User.withDefaultPasswordEncoder()
+					.username(username)
+					.password(player.getPassword())
+					.roles("")
+					.build();
+		}
+	}
+}
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+				.antMatchers("/rest/**").denyAll()
+				.antMatchers("/api/games").hasAnyRole("user");
+
+		http.formLogin()
+				.usernameParameter("user").passwordParameter("password").loginPage("/api/login");
+
+		http.logout().logoutUrl("/api/logout");
+
+		http.csrf().disable();
+//		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+//		http.formLogin().successHandler(authenticationSuccessHandler);
+//		http.formLogin().failureHandler(authenticationFailureHandler);
+	}
+}
+
+//@Component
+//public class RESTAuthenticationEntryPoint implements AuthenticationEntryPoint {
+//
+//
+//	@Override
+//	public void commence(HttpServletRequest request, HttpServletResponse response, org.springframework.security.core.AuthenticationException authException) throws IOException, ServletException {
+//		response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//
+//	}
+//}
