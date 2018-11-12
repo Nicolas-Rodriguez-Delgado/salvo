@@ -1,6 +1,10 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -18,37 +22,17 @@ public class SalvoController {
     @Autowired
     private GamePlayerRepository GamePlayerRepo;
     @Autowired
-    private ScoreRepository scoreRepository;
-    @Autowired
     private PlayerRepository playerRepository;
 
 
     @RequestMapping("/games")
     @GetMapping
-    public List<Object> findThemAll() {
+    public List<Object> findThemAll(Authentication authentication) {
         return gameRepo
                 .findAll()
                 .stream()
-                .map(game -> gameMap(game))
+                .map(game -> gameMap(game, authentication))
                 .collect(toList());
-    }
-
-
-    private Map<String, Object> gameMap (Game game) {
-        Map<String, Object> gamemap = new LinkedHashMap<String, Object>();
-        gamemap.put("id", game.getId());
-        gamemap.put("date", game.getDate());
-        gamemap.put("gamplayers", gameplayerSet(game.getGamePlayerSet()));
-        gamemap.put("scores", game.getGameScore());
-        return gamemap;
-    }
-
-
-    private Map<String, Object> gameplayerMap (GamePlayer gamePlayer) {
-        return new LinkedHashMap<String, Object>(){{
-            put("id", gamePlayer.getId());
-            put("player", playerMap(gamePlayer.getPlayerID()));
-        }};
     }
 
     private Map<String, Object> playerMap (Player player) {
@@ -59,6 +43,40 @@ public class SalvoController {
 
         return playermap;
     }
+
+    private Map<String, Object> gameMap (Game game, Authentication authentication) {
+        Map<String, Object> gamemap = new LinkedHashMap<String, Object>();
+        gamemap.put("player", playerMap(getAuthPlayer(authentication)));
+        gamemap.put("id", game.getId());
+        gamemap.put("date", game.getDate());
+        gamemap.put("gamplayers", gameplayerSet(game.getGamePlayerSet()));
+        gamemap.put("scores", game.getGameScore());
+        return gamemap;
+    }
+
+    private Player getAuthPlayer(Authentication authentication) {
+
+        if (!isGuest(authentication)){
+            return playerRepository.findByEmail(authentication.getName());
+
+        }else{
+            return null;
+        }
+    }
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+
+    private Map<String, Object> gameplayerMap (GamePlayer gamePlayer) {
+        return new LinkedHashMap<String, Object>(){{
+            put("id", gamePlayer.getId());
+            put("player", playerMap(gamePlayer.getPlayerID()));
+        }};
+    }
+
+
 
     public List<Map<String, Object>> gameplayerSet(Set<GamePlayer> gameplayers) {
         return gameplayers.stream()
@@ -151,6 +169,30 @@ public class SalvoController {
         scoremap.put("scores", player.getPlayerScore());
         return scoremap;
     }
+
+
+    public ResponseEntity<Map<String, Object>> registerUser(@RequestParam String email,
+                                                @RequestParam String password){
+        if (email == null || password == null){
+
+            return new ResponseEntity<>(createMap("Error","All fields must be files"), HttpStatus.FORBIDDEN);
+
+        }else if (playerRepository.findByEmail(email) == null){
+
+            return new ResponseEntity<>(createMap("Success", "User created"), HttpStatus.CREATED);
+
+        }else {
+            return new ResponseEntity<>(createMap("Error","User already exists"), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public Map<String, Object> createMap (String key, String value){
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", key);
+        map.put("key", value);
+        return map;
+    }
+
 
 
 
