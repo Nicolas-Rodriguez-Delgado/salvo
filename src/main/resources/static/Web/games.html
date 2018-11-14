@@ -9,6 +9,12 @@
         table, th, td {
             border: 1px solid black;
         }
+        form {
+            margin-top: 50px;
+        }
+        .currrent {
+            size: 30px;
+        }
 
     </style>
 </head>
@@ -28,6 +34,29 @@
     </tbody>
 
 </table>
+
+<p class="current">Current User:</p>
+
+<form >
+    <p>Log In</p>
+    Username:<br>
+    <input type="text" name="username" placeholder="Email" id="email">
+    <br>
+    Password:<br>
+    <input type="password" name="password"  id="password">
+    <br><br>
+    <input type="button"  value="Log In" onclick="login()">
+</form>
+<form>
+    <p>Sign Up</p>
+    Username:<br>
+    <input type="text" name="username" placeholder="Email" id="emailsp">
+    <br>
+    Password:<br>
+    <input type="text" name="password"  id="passwordsp">
+    <br><br>
+    <input type="button" value="Sign Up">
+</form>
 
 
 </body>

@@ -1,11 +1,11 @@
-$(function (){
+(function (){
     fetch('http://localhost:8080/api/scores').
     then(response => {
         return response.json()
     }).then( data => {
         createScores(data);
     })
-})
+})()
 
 function createScores(myData) {
 
@@ -49,5 +49,26 @@ function createScores(myData) {
         }
 
     }
+
+}
+
+function login () {
+
+    var email = document.getElementById("email").value.toLowerCase();
+    var password = document.getElementById("password").value;
+    var currentName = document.getElementById("current");
+
+    $.post("/api/login", {username: email, password: password})
+        .done(success => {
+            console.log("Logged in"),
+            console.log(success)
+            console.log(email);
+            currentName = email;
+            })
+        .fail(err => console.log(err));
+    $.post("/api/logout", {})
+
+
+    // document.location.reload(true)
 
 }

@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -170,14 +169,15 @@ public class SalvoController {
         return scoremap;
     }
 
-
-    public ResponseEntity<Map<String, Object>> registerUser(@RequestParam String email,
+    @RequestMapping("/players")
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> registerUser(@RequestParam String username,
                                                 @RequestParam String password){
-        if (email == null || password == null){
+        if (username == null || password == null){
 
             return new ResponseEntity<>(createMap("Error","All fields must be files"), HttpStatus.FORBIDDEN);
 
-        }else if (playerRepository.findByEmail(email) == null){
+        }else if (playerRepository.findByEmail(username) == null){
 
             return new ResponseEntity<>(createMap("Success", "User created"), HttpStatus.CREATED);
 
