@@ -12,8 +12,9 @@
         form {
             margin-top: 50px;
         }
-        .currrent {
-            size: 30px;
+        .title {
+            font-size: 30px;
+            color: green;
         }
 
     </style>
@@ -35,7 +36,8 @@
 
 </table>
 
-<p class="current">Current User:</p>
+<p>Current User: </p>
+<p id="current" class="title"></p>
 
 <form >
     <p>Log In</p>
@@ -46,22 +48,36 @@
     <input type="password" name="password"  id="password">
     <br><br>
     <input type="button"  value="Log In" onclick="login()">
+    <input type="button" value="Log Out" onclick="logout()">
 </form>
 <form>
     <p>Sign Up</p>
     Username:<br>
-    <input type="text" name="username" placeholder="Email" id="emailsp">
+    <input type="text" name="username" placeholder="Email" id="emailsp" value="">
     <br>
     Password:<br>
-    <input type="text" name="password"  id="passwordsp">
+    <input type="password" name="password"  id="passwordsp" value="">
     <br><br>
-    <input type="button" value="Sign Up">
+    <input type="button" value="Sign Up" onclick="signUp()">
 </form>
+
+<table id="gamesTable">
+    <thead>
+    <th>Player 1</th>
+    <th>Player 2</th>
+    <th>Create</th>
+    <th>Join</th>
+    </thead>
+    <tbody id="tbgames">
+
+    </tbody>
+
+</table>
 
 
 </body>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
 <script src="./games.js"></script>
 <!--<script src="./gamev2.js"></script>-->
 

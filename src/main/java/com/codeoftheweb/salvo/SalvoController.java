@@ -45,10 +45,10 @@ public class SalvoController {
 
     private Map<String, Object> gameMap (Game game, Authentication authentication) {
         Map<String, Object> gamemap = new LinkedHashMap<String, Object>();
-        gamemap.put("player", playerMap(getAuthPlayer(authentication)));
+//        gamemap.put("player", playerMap(getAuthPlayer(authentication)));
         gamemap.put("id", game.getId());
         gamemap.put("date", game.getDate());
-        gamemap.put("gamplayers", gameplayerSet(game.getGamePlayerSet()));
+        gamemap.put("gameplayers", gameplayerSet(game.getGamePlayerSet()));
         gamemap.put("scores", game.getGameScore());
         return gamemap;
     }
@@ -169,16 +169,16 @@ public class SalvoController {
         return scoremap;
     }
 
-    @RequestMapping("/players")
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> registerUser(@RequestParam String username,
-                                                @RequestParam String password){
-        if (username == null || password == null){
+    @RequestMapping(value = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> registerUser(  @RequestParam String username,
+                                                              @RequestParam String password){
+        if (username == "" || password == ""){
 
             return new ResponseEntity<>(createMap("Error","All fields must be files"), HttpStatus.FORBIDDEN);
 
         }else if (playerRepository.findByEmail(username) == null){
 
+            playerRepository.save(new Player(username, username, password));
             return new ResponseEntity<>(createMap("Success", "User created"), HttpStatus.CREATED);
 
         }else {
