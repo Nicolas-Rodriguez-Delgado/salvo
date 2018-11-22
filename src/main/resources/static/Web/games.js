@@ -1,26 +1,24 @@
 
 (function () {
 
-    var apiRequest1 = fetch('http://localhost:8080/api/scores').then(function (response) {
-        return response.json()
+    fetch('http://localhost:8080/api/scores')
+        .then(function (response) {
+            return response.json()
+    }).then(data => {
+        createScores(data);
+    }).catch(err => {
+        console.log("error" + err)
+    });
+    fetch('http://localhost:8080/api/games', {credentials: 'include'})
+        .then(function (response) {
+            return response.json()
+        }).then(data => {
+
+        currentUserName(data);
     });
 
-
-    var apiRequest2 = fetch('http://localhost:8080/api/games').then(function (response) {
-        return response.json()
-
-    });
-    var combinedData = {"apiRequest1":{},"apiRequest2":{}};
-            Promise.all([apiRequest1,apiRequest2]).then(function(values){
-                combinedData["apiRequest1"] = values[0];
-                combinedData["apiRequest2"] = values[1];
-                return combinedData;
-    })
-    apiRequest1.then(data => createScores(data));
-    apiRequest2.then(data2 => createGames(data2));
 
 })();
-
 
 
 function createScores(myData) {
@@ -76,12 +74,13 @@ function login () {
 }
 
 function log(email, password) {
-    var currentName = document.getElementById("current");
 
-    console.log("regist11rado: " + email + " :1: " + password)
+    var currentName = document.getElementById("current");
     $.post("/api/login", {username: email, password: password})
         .done(resp => {
-            currentName.append(email);
+
+            currentName.innerText = email;
+
             alert("You are now logged in!");
         })
         .fail(err => console.log("Ocurrio un error: " + JSON.stringify(err)));
@@ -93,7 +92,7 @@ function logout() {
 
     var current = document.getElementById("current");
     var emailout= document.getElementById("email");
-    current.innerHTML= "";
+    current.innerHTML= "Please Log In";
     emailout.value = "";
     $.post("/api/logout").done(function() { console.log("logged out"); })
 
@@ -109,25 +108,41 @@ function signUp() {
         ).fail(err => {console.log("Ocurrio un: " + JSON.stringify(err))})
 }
 
-function createGames(myData) {
+function currentUserName(name){
 
-    let gamesTable = document.getElementById("gamesTable");
 
-    for(let j = 0; j< myData.length; j++) {
-        let newGame = document.createElement("tr");
-        if(myData[j].gameplayers != 0) {
-            newGame.insertCell().innerHTML = `${ myData[j].gameplayers[0].player.username}`;
-            newGame.insertCell().innerHTML = `${ myData[j].gameplayers[1].player.username}`;
-            newGame.insertCell().innerHTML = ""
-            newGame.insertCell().innerHTML = '<a href="" target="_parent"><button>Create me !</button></a>'
-            gamesTable.append(newGame);
-        }else {
-            newGame.insertCell().innerHTML = "no player";
-            newGame.insertCell().innerHTML = "no player";
-            gamesTable.append(newGame);
-        }
 
+    var currentName = document.getElementById("current");
+
+
+    if(name[0].loggedPlayer != null) {
+
+        currentName.append(name[0].loggedPlayer.email);
+
+    }else {
+        currentName.append("Please Log In");
     }
+
+}
+
+
+
+function createGames() {
+
+    document.addEventListener("click", createGames);
+
+    $.post("/api/games")
+        .done(resp => {
+            // let currentUser = document.querySelector(".title").value;
+            // console.log(currentUser);
+            // let gamesTable = document.getElementById("gamesTable");
+            // let newRo = document.createElement("tr")
+            // newRo.insertCell().innerHTML = currentUser;
+            // gamesTable.append(newRo);
+
+            alert("New game created!");
+        })
+        .fail(err => console.log("error: " + JSON.stringify(err)));
 
 }
 
