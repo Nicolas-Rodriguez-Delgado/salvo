@@ -9,6 +9,7 @@
     }).catch(err => {
         console.log("error" + err)
     });
+
     fetch('http://localhost:8080/api/games', {credentials: 'include'})
         .then(function (response) {
             return response.json()

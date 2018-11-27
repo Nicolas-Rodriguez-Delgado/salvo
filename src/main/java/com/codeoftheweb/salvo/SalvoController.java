@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo;
 
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class SalvoController {
     private PlayerRepository playerRepository;
 
 
-    @RequestMapping(value ="/games", method = RequestMethod.POST)
+    @RequestMapping(value ="/games")
     @GetMapping
     public List<Map<String, Object>> findThemAll(Authentication authentication) {
         List<Map<String, Object>> collect = gameRepo
@@ -62,13 +61,15 @@ public class SalvoController {
         return gamemap;
     }
 
-    public ResponseEntity<Map<String,Object>> createGame(@RequestParam String username) {
+    @RequestMapping(value = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Object> createGame(Authentication authentication) {
 
-        if (username == "") {
+        if (isGuest(authentication)) {
             return new ResponseEntity<>(createMap("Error", "You must be Logged In"), HttpStatus.FORBIDDEN);
         }else {
-            gameRepo.save(new Game());
-            return new ResponseEntity<>(createMap("Success", "A new game was created"), HttpStatus.CREATED);
+            Game save = gameRepo.save(new Game());
+            GamePlayer gamePlayer = GamePlayerRepo.save(new GamePlayer(getAuthPlayer(authentication),save));
+            return new ResponseEntity<>(gamePlayer.getId(), HttpStatus.CREATED);
         }
 
     }
@@ -77,7 +78,6 @@ public class SalvoController {
     private Player getAuthPlayer(Authentication authentication) {
 
         if (!isGuest(authentication)){
-            System.out.println(playerRepository.findByEmail(authentication.getName()));
             return playerRepository.findByEmail(authentication.getName());
         }else{
             return null;
