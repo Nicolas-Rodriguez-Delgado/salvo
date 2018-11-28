@@ -213,6 +213,24 @@ public class SalvoController {
         return map;
     }
 
+    @RequestMapping(value = "/api/game/{nn}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> joinGame (@PathVariable Long nn,Authentication authentication){
+
+        Game game = gameRepo.findById();
+
+        if(isGuest(authentication)){
+            return new ResponseEntity<>("Error", HttpStatus.UNAUTHORIZED);
+        }else if (game.getId() != nn){
+            return new ResponseEntity<>("Error", HttpStatus.FORBIDDEN);
+        }else if(game.getGamePlayerSet().size() >= 2) {
+            return new ResponseEntity<>("Error", HttpStatus.FORBIDDEN);
+        }else {
+             GamePlayerRepo.save(new GamePlayer(getAuthPlayer(authentication), game));
+             return new ResponseEntity<>("Success", HttpStatus.CREATED);
+        }
+
+    }
+
 
 
 

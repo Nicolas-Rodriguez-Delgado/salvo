@@ -14,8 +14,9 @@
         .then(function (response) {
             return response.json()
         }).then(data => {
-
+        createGamesTable(data);
         currentUserName(data);
+        console.log(data);
     });
 
 
@@ -124,6 +125,41 @@ function currentUserName(name){
         currentName.append("Please Log In");
     }
 
+}
+
+function createGamesTable(games){
+
+        console.log(games);
+        var table = $("#tbgames");
+
+        for (let k=0; k<games.length; k++){
+
+            if (games[k].gameplayers.length == 2) {
+
+                var row = document.createElement("tr");
+                row.insertCell().innerHTML = games[k].gameplayers[0].player.username;
+                row.insertCell().innerHTML = games[k].gameplayers[1].player.username;
+                table.append(row);
+            }else if(games[k].gameplayers.length == 1){
+
+                var row = document.createElement("tr");
+                row.insertCell().innerHTML = games[k].gameplayers[0].player.username;
+                row.insertCell().innerHTML = "No Player";
+                let button = document.createElement("button");
+                button.innerText = "Join Game";
+                row.insertCell().append(button);
+                table.append(row);
+
+            } else {
+                var row = document.createElement("tr");
+                row.insertCell().innerHTML = "No Player";
+                row.insertCell().innerHTML = "No Player";
+                let button = document.createElement("button");
+                button.innerText = "Join Game";
+                row.insertCell().append(button);
+                table.append(row);
+            }
+        }
 }
 
 
