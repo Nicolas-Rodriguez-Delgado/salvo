@@ -130,20 +130,19 @@ function currentUserName(name){
 
 function createGames() {
 
-    document.addEventListener("click", createGames);
 
     $.post("/api/games")
         .done(resp => {
-            // let currentUser = document.querySelector(".title").value;
-            // console.log(currentUser);
-            // let gamesTable = document.getElementById("gamesTable");
-            // let newRo = document.createElement("tr")
-            // newRo.insertCell().innerHTML = currentUser;
-            // gamesTable.append(newRo);
 
+            var table = $(".gamesTable");
+            var row = document.createElement("tr");
+            row.insertCell().innerHTML = $(".title").innerHTML;
+            table.append(row);
             alert("New game created!");
+            console.log(resp);
+            window.location.href= "game.html?gp="+resp;
         })
-        .fail(err => console.log("error: " + JSON.stringify(err)));
+        .catch(err => alert("You must be logged in"));
 
 }
 
