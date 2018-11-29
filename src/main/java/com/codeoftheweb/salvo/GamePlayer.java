@@ -77,6 +77,7 @@ public class GamePlayer {
 
     }
 
+
     public void addSalvo(Salvo salvo){
 
         salvo.setGamePlayer(this);

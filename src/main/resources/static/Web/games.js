@@ -14,6 +14,8 @@
         .then(function (response) {
             return response.json()
         }).then(data => {
+
+        var games = data;
         createGamesTable(data);
         currentUserName(data);
         console.log(data);
@@ -96,7 +98,7 @@ function logout() {
     var emailout= document.getElementById("email");
     current.innerHTML= "Please Log In";
     emailout.value = "";
-    $.post("/api/logout").done(function() { console.log("logged out"); })
+    $.post("/api/logout").done(function() { alert("You have logged out"); })
 
 }
 function signUp() {
@@ -129,10 +131,11 @@ function currentUserName(name){
 
 function createGamesTable(games){
 
-        console.log(games);
         var table = $("#tbgames");
 
         for (let k=0; k<games.length; k++){
+
+            let gameId = games[k].id;
 
             if (games[k].gameplayers.length == 2) {
 
@@ -146,6 +149,7 @@ function createGamesTable(games){
                 row.insertCell().innerHTML = games[k].gameplayers[0].player.username;
                 row.insertCell().innerHTML = "No Player";
                 let button = document.createElement("button");
+                button.setAttribute("onclick", `joinGame(${gameId});`);
                 button.innerText = "Join Game";
                 row.insertCell().append(button);
                 table.append(row);
@@ -155,6 +159,7 @@ function createGamesTable(games){
                 row.insertCell().innerHTML = "No Player";
                 row.insertCell().innerHTML = "No Player";
                 let button = document.createElement("button");
+                button.setAttribute("onclick", `joinGame(${gameId});`);
                 button.innerText = "Join Game";
                 row.insertCell().append(button);
                 table.append(row);
@@ -181,5 +186,22 @@ function createGames() {
         .catch(err => alert("You must be logged in"));
 
 }
+
+function joinGame(id) {
+
+    var nn = id
+
+    $.post(`/api/game/${nn}/players`)
+        .done(resp => {
+
+            console.log(resp);
+            window.location.href = "game.html?gp="+resp ;
+
+        })
+        .catch(err => {console.log(err)})
+
+}
+
+
 
 

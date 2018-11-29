@@ -22,6 +22,8 @@ public class SalvoController {
     private GamePlayerRepository GamePlayerRepo;
     @Autowired
     private PlayerRepository playerRepository;
+    @Autowired
+    private ShipRepository shipRepository;
 
 
     @RequestMapping(value ="/games")
@@ -213,25 +215,52 @@ public class SalvoController {
         return map;
     }
 
-    @RequestMapping(value = "/api/game/{nn}/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> joinGame (@PathVariable Long nn,Authentication authentication){
+    @RequestMapping(value = "/game/{id}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> joinGame (@PathVariable Long id,Authentication authentication){
 
-        Game game = gameRepo.findById();
+        Game game = gameRepo.findGameById(id);
 
         if(isGuest(authentication)){
             return new ResponseEntity<>("Error", HttpStatus.UNAUTHORIZED);
-        }else if (game.getId() != nn){
+        }else if (game.getId() != id){
             return new ResponseEntity<>("Error", HttpStatus.FORBIDDEN);
         }else if(game.getGamePlayerSet().size() >= 2) {
             return new ResponseEntity<>("Error", HttpStatus.FORBIDDEN);
         }else {
-             GamePlayerRepo.save(new GamePlayer(getAuthPlayer(authentication), game));
-             return new ResponseEntity<>("Success", HttpStatus.CREATED);
+             GamePlayer gp = GamePlayerRepo.save(new GamePlayer(getAuthPlayer(authentication), game));
+             return new ResponseEntity<>(gp.getId(), HttpStatus.CREATED);
         }
 
     }
+    @RequestMapping(value = "/games/players/{gamePlayerId}/ships", method = RequestMethod.POST)
+    public ResponseEntity<Object> saveShips (@PathVariable Long gamePlayerId,
+                                                @RequestBody List<Ship> ships,
+                                                Authentication authentication){
 
+        GamePlayer gamePlayer = GamePlayerRepo.findGamePlayerById(gamePlayerId);
+        Player loggedPlayer = playerRepository.findByEmail(authentication.getName());
 
+        if(getAuthPlayer(authentication) == null ){
 
+            return new ResponseEntity<>(createMap("Error","Unathorized"), HttpStatus.UNAUTHORIZED);
 
+        }else if(loggedPlayer.getId() != gamePlayer.getPlayerID().getId()) {
+
+            return new ResponseEntity<>(createMap("Error", "Id dont match"), HttpStatus.UNAUTHORIZED);
+
+        }else if(gamePlayer == null){
+
+            return new ResponseEntity<>(createMap("Error","Null"), HttpStatus.UNAUTHORIZED);
+
+        }else if (gamePlayer.getShipSet().size() > 0){
+
+            return new ResponseEntity<>(createMap("Error","Ships are there"), HttpStatus.FORBIDDEN);
+
+        }else {
+
+            gamePlayer.shipSet = ships;
+            GamePlayerRepo.save(gamePlayer);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+    }
 }
