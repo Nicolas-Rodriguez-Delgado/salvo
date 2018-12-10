@@ -4,80 +4,181 @@
           content="text/html; charset=ISO-8859-1">
 
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <title>Games</title>
-
     <style>
-        html {background-image: url("static/sea.jpg")}
-        thead {color:white;}
-        tbody {color:white;}
 
-        #firstTable {
-            display: flex;
-            flex-direction: row;
-            justify-content: left;
+
+        body {
+            background-image: url("sea.jpg");
         }
-        #secondTable {
-            display: flex;
-            flex-direction: row;
-            justify-content: right;
+        .band {
+            background-color: snow;
+        }
+        .battle:hover {
+            background-color: yellow;
+        }
+
+        h1, h3{
+            text-align: center;
+            color: snow;
+        }
+
+        thead {
+            color: white;
+        }
+
+        tbody {
+            color: white;
         }
 
         th, td {
             border: 1px solid black;
         }
+
         th, td {
             text-align: center;
             width: 35px;
             height: 35px;
-            background-color: cornflowerblue;
+            background-color: aqua;
         }
+
+        .ship, .ships {
+            border: 3px solid black;
+            background-color: gray !important;
+
+        }
+
         .hit {
-            background-color: red; !important;
+            background-color: red;
+        !important;
         }
-        .noHit {
-            background-color: green;
-        }
-        .ship {
-            background-color: gray;
-        }
+
         button {
-            display:flex;
+            margin: auto;
+            display: block;
+            margin: 15px;
+        }
+
+        #firstTable, #secondTable {
+            display: flex;
             justify-content: center;
         }
-        </style>
+
+        .ship1 {
+            width: 90%;
+        }
+
+        #firstTable td:hover {
+            background-color: yellow;
+        }
+
+        .high {
+            background-color: yellow;
+        }
+
+
+    </style>
 </head>
 <body>
-<h1>Game 1</h1>
-<h3><p id="you">(YOU) </p>  vs. <p id="op">(OPPONENT) </p></h3>
 
-<button type="button" onclick="location.href = '/web/games.html';"> Home</button>
+<div class="container-fluid">
 
-<table id="firstTable">
-    <thead id="th">
+    <h1>Game 1</h1>
 
-    </thead>
-    <tbody id="tb">
+    <h3><p id="you">(YOU) </p> vs. <p id="op">(OPPONENT) </p></h3>
 
-    </tbody>
 
-</table>
+    <button type="button" onclick="location.href = '/web/games.html';"> Home</button>
 
-<table id="secondTable">
-    <thead id="th2">
+    <div class="row">
+        <div class="col">
+            <table id="firstTable" class="hoverTable">
+                <thead id="th">
 
-    </thead>
-    <tbody id="tb2" >
+                </thead>
+                <tbody id="tb">
 
-    </tbody>
+                </tbody>
 
-    <p class ="hit"></p>
+            </table>
 
-</table>
 
+        </div>
+        <div class="col">
+            <table id="secondTable">
+                <thead id="th2">
+
+                </thead>
+                <tbody id="tb2">
+
+                </tbody>
+
+            </table>
+            <br>
+        </div>
+    </div>
+
+    <div>
+        <h3>Ships</h3>
+    </div>
+    <div class="row band">
+        <div class="col" onclick="chooseShip(5)">
+            Aircraft carrier
+
+            <div class="battle">
+                <img class="ship1" src="battleship-silhouette-clipart-1.jpg">
+            </div>
+            <form action="">
+                <input type="radio" name="direction" id="hori" checked="checked" value="horizontal"> Horizontal<br>
+                <input type="radio" name="direction" id="vert" value="vertical"> Vertical<br>
+
+            </form>
+
+        </div>
+        <div class="col" onclick="chooseShip(4)">
+            Battleship
+            <div class="battle" >
+                <img class="ship1" src="battleship2.png">
+            </div>
+        </div>
+        <div class="col" onclick="chooseShip(4)">
+            Submarine
+            <div class="battle" >
+                <img class="ship1" src="submarine.png">
+            </div>
+        </div>
+        <div class="col" onclick="chooseShip(3)">
+            Destroyer
+            <div class="battle" >
+                <img class="ship1" src="destroyer2.png">
+            </div>
+        </div>
+        <div class="col" onclick="chooseShip(2)">
+            Patrol Boat
+            <div class="battle" >
+                <img class="ship1" src="patrol.png">
+            </div>
+        </div>
+    </div>
+
+    <button type="button"><a href="#">Twist</a></button>
+
+</div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
 <script src="./game.js"></script>
-<!--<script src="./gamev2.js"></script>-->
 
 </html>

@@ -109,7 +109,7 @@ function signUp() {
         .then(success => {
             log(emailRegistro,passwordRegistro), console.log(success)
         }
-        ).fail(err => {console.log("Ocurrio un: " + JSON.stringify(err))})
+        ).catch(err => {console.log("Username already exists!")})
 }
 
 function currentUserName(name){
@@ -198,7 +198,7 @@ function joinGame(id) {
             window.location.href = "game.html?gp="+resp ;
 
         })
-        .catch(err => {console.log(err)})
+        .catch(err => {alert("You must be logged in")});
 
 }
 
