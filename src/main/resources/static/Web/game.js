@@ -43,9 +43,6 @@ function createGrid(oneTable) {
 };
 
 
-
-
-
 // function putShips(myData) {
 //
 //
@@ -129,90 +126,86 @@ function createGrid(oneTable) {
 // }
 
 
-$("a").click(function(){
-    $(".ship").each(function() {
-        var $this = $(this);
-        var newrows = [];
-        $this.find("tr").each(function(){
-            var i = 0;
-            $(this).find("td").each(function(){
-                i++;
-                if(newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
-                newrows[i].append($(this));
-            });
-        });
-        $this.find("tr").remove();
-        $.each(newrows, function(){
-            $this.append(this);
-        });
-    });
-
-    return false;
-});
 
 function addClass(oneCell) {
 
-    if(oneCell != null) {
+    if (oneCell != null) {
         oneCell.classList.add("high");
-    }else if(oneCell == null) {
-        oneCell.classList.remove("high");
-    }else {
+    } else if (oneCell == null) {
+        $("#tb").onmouseenter(
+            $('.high').removeClass('high'));
+
+    } else {
         oneCell.classList.remove("high");
     }
 
 }
 
-function chooseShip(size) {
+function chooseShip(_this) {
+
+    Array.from($('div')).forEach(el => el.classList.remove('activeShip'))
+
+    console.log(_this.id)
+    _this.classList.add('activeShip')
+    console.log(_this.dataset.lenght)
 
     var arr = [];
 
-    $(document).on("mouseenter", "#tb td", function (e) {
 
-        e.stopPropagation();
-        // e.preventDefault();
-        var data = $(this).attr('class');
+        $("#tb td").on("mouseenter", function (e) {
+
+            e.stopPropagation();
+            var data = $(this).attr('class');
+
+            var size = $(".activeShip")[0].dataset.lenght
+            console.log(size)
+
+            for (let i = 0; i < size; i++) {
+
+                if (document.getElementById("hori").checked) {
+
+                    let num = parseInt(data.charAt(1));
+                    let clase = data.charAt(0).concat(i + num).toString();
+                    let cell = document.querySelector(`.${clase}`);
+
+                    addClass(cell);
+                    arr.push(clase);
+
+                } else if (document.getElementById("vert").checked) {
+
+                    let clase2 = String.fromCharCode(data.charCodeAt(0) + i).concat(parseInt(data.charAt(1)));
+                    let cell = document.querySelector(`.${clase2}`);
+
+                    addClass(cell);
+                    arr.push(clase2);
+                }
+            }
+        });
+
+        $("#tb td").on("mouseleave", function (e) {
+
+            e.stopPropagation()
+
+            for (let j = 0; j < arr.length; j++) {
+
+                let cellOut = document.querySelector(`.${arr[j]}`);
+                if (cellOut != null) {
+                    cellOut.classList.remove("high");
+                }
+            }
+        });
 
 
-    for (let i = 0; i<size; i++){
-
-
-        if (document.getElementById("hori").checked) {
-
-            let num = parseInt(data.charAt(1));
-            let clase = data.charAt(0).concat(i + num).toString();
-            let cell = document.querySelector(`.${clase}`);
-
-            addClass(cell);
-            arr.push(clase);
-
-        }else if(document.getElementById("vert").checked){
-
-            let clase2 = String.fromCharCode(data.charCodeAt(0) + i).concat(parseInt(data.charAt(1)));
-            let cell = document.querySelector(`.${clase2}`);
-
-            addClass(cell);
-            arr.push(clase2);
-        }
 
 
 
     }
 
-    });
-
-    $(document).on("mouseleave", "#tb td", function (){
-
-        for (let j = 0; j < arr.length; j++) {
-
-            let cellOut = document.querySelector(`.${arr[j]}`);
-            if (cellOut != null) {
-                cellOut.classList.remove("high");
-            }
-        }
-    });
 
 
 
-}
+
+
+
 
 
