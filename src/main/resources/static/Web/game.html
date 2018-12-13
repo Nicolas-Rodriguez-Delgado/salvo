@@ -14,14 +14,17 @@
         body {
             background-image: url("sea.jpg");
         }
+
         .band {
             background-color: snow;
+            text-align: center;
         }
+
         .battle:hover {
             background-color: yellow;
         }
 
-        h1, h3{
+        h1, h3 {
             text-align: center;
             color: snow;
         }
@@ -30,7 +33,7 @@
             color: white;
         }
 
-        tbody {
+        tbody, p {
             color: white;
         }
 
@@ -78,9 +81,11 @@
         .high {
             background-color: yellow;
         }
+
         form {
-            margin:10px;
+            margin: 10px;
         }
+
         .forbidden {
             background-color: red;
         }
@@ -105,7 +110,7 @@
                 <thead id="th">
 
                 </thead>
-                <tbody id="tb">
+                <tbody id="tb" onclick="placeShip()">
 
                 </tbody>
 
@@ -127,67 +132,56 @@
         </div>
     </div>
 
+    <button type="button" onclick="postShips()">Start Game</button>
+    <p>To start the game all the ships must be placed!</p>
     <div>
         <h3>Ships</h3>
     </div>
     <div class="row band">
-        <div class="col oneShip" id="ac" data-lenght="5" onclick="chooseShip(this)">
+        <div class="col oneShip" id="ac" data-lenght="5" data-type="airCarrier" onclick="chooseShip(this)">
             Aircraft carrier
 
             <div class="battle">
                 <img class="ship1" src="battleship-silhouette-clipart-1.jpg">
             </div>
-            <form action="">
-                <input type="radio" name="direction" id="hori" checked="checked" value="horizontal"> Horizontal<br>
-                <input type="radio" name="direction" id="vert" value="vertical"> Vertical<br>
 
-            </form>
 
         </div>
-        <div class="col oneShip" id="bs" data-lenght="4" onclick="chooseShip(this)">
+        <div class="col oneShip" id="bs" data-lenght="4" data-type="battleship" onclick="chooseShip(this)">
             Battleship
-            <div class="battle" >
+            <div class="battle">
                 <img class="ship1" src="battleship2.png">
             </div>
-            <form action="">
-                <input type="radio" name="direction" checked="checked" value="horizontal"> Horizontal<br>
-                <input type="radio" name="direction" value="vertical"> Vertical<br>
 
-            </form>
         </div>
-        <div class="col oneShip" id="sm" data-lenght="4" onclick="chooseShip(this)">
+        <div class="col oneShip" id="sm" data-lenght="4" data-type="submarine" onclick="chooseShip(this)">
             Submarine
-            <div class="battle" >
+            <div class="battle">
                 <img class="ship1" src="submarine.png">
             </div>
-            <form action="">
-                <input type="radio" name="direction" checked="checked" value="horizontal"> Horizontal<br>
-                <input type="radio" name="direction" value="vertical"> Vertical<br>
 
-            </form>
         </div>
-        <div class="col oneShip" id="de" data-lenght="3" onclick="chooseShip(this)">
+        <div class="col oneShip" id="de" data-lenght="3" data-type="destroyer" onclick="chooseShip(this)">
             Destroyer
-            <div class="battle" >
+            <div class="battle">
                 <img class="ship1" src="destroyer2.png">
             </div>
-            <form action="">
-                <input type="radio" name="direction" checked="checked" value="horizontal"> Horizontal<br>
-                <input type="radio" name="direction" value="vertical"> Vertical<br>
 
-            </form>
         </div>
-        <div class="col oneShip" id="pb" data-lenght="2" onclick="chooseShip(this)">
+        <div class="col oneShip" id="pb" data-lenght="2" data-type="patrol" onclick="chooseShip(this)">
             Patrol Boat
-            <div class="battle" >
+            <div class="battle">
                 <img class="ship1" src="patrol.png">
             </div>
-            <form action="">
-                <input type="radio" name="direction"  checked="checked" value="horizontal"> Horizontal<br>
-                <input type="radio" name="direction"  value="vertical"> Vertical<br>
 
-            </form>
         </div>
+    </div>
+    <div class="band">
+        <form action="">
+            <input type="radio" name="direction" id="hori" checked="checked" value="horizontal"> Horizontal<br>
+            <input type="radio" name="direction" id="vert" value="vertical"> Vertical<br>
+
+        </form>
     </div>
 
 </div>

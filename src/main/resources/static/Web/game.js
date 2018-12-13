@@ -126,7 +126,6 @@ function createGrid(oneTable) {
 // }
 
 
-
 function addClass(oneCell) {
 
     if (oneCell != null) {
@@ -141,65 +140,156 @@ function addClass(oneCell) {
 
 }
 
+var size;
+var type;
+
 function chooseShip(_this) {
 
     Array.from($('div')).forEach(el => el.classList.remove('activeShip'))
 
-    console.log(_this.id)
     _this.classList.add('activeShip')
-    console.log(_this.dataset.lenght)
 
     var arr = [];
 
 
-        $("#tb td").on("mouseenter", function (e) {
+    $("#tb td").on("mouseenter", function (e) {
+
+        e.stopPropagation();
+
+        var data = $(this).attr('class');
+
+
+        size = $(".activeShip")[0].dataset.lenght
+        type = $(".activeShip")[0].dataset.type
+
+        for (let i = 0; i < size; i++) {
 
             e.stopPropagation();
-            var data = $(this).attr('class');
+            if (document.getElementById("vert").checked) {
 
-            var size = $(".activeShip")[0].dataset.lenght
-            console.log(size)
+                let num = data.match(/\d+/g).map(Number)[0]
+                let clase = data.charAt(0).concat(i + num).toString();
+                let cell = document.querySelector(`.${clase}`);
 
-            for (let i = 0; i < size; i++) {
+                addClass(cell);
+                arr.push(clase);
 
-                if (document.getElementById("hori").checked) {
+            } else if (document.getElementById("hori").checked) {
 
-                    let num = parseInt(data.charAt(1));
-                    let clase = data.charAt(0).concat(i + num).toString();
-                    let cell = document.querySelector(`.${clase}`);
+                let clase2 = String.fromCharCode(data.charCodeAt(0) + i).concat(data.match(/\d+/g).map(Number)[0]);
+                let cell = document.querySelector(`.${clase2}`);
 
-                    addClass(cell);
-                    arr.push(clase);
-
-                } else if (document.getElementById("vert").checked) {
-
-                    let clase2 = String.fromCharCode(data.charCodeAt(0) + i).concat(parseInt(data.charAt(1)));
-                    let cell = document.querySelector(`.${clase2}`);
-
-                    addClass(cell);
-                    arr.push(clase2);
-                }
+                addClass(cell);
+                arr.push(clase2);
             }
-        });
+        }
+    });
 
-        $("#tb td").on("mouseleave", function (e) {
+    $("#tb td").on("mouseleave", function (e) {
 
-            e.stopPropagation()
+        e.stopPropagation()
 
-            for (let j = 0; j < arr.length; j++) {
+        for (let j = 0; j < arr.length; j++) {
 
-                let cellOut = document.querySelector(`.${arr[j]}`);
-                if (cellOut != null) {
-                    cellOut.classList.remove("high");
-                }
+            let cellOut = document.querySelector(`.${arr[j]}`);
+            if (cellOut != null) {
+                cellOut.classList.remove("high");
             }
-        });
+        }
+    });
 
+}
 
+var allLoc = [];
+var placedType = [];
 
-
-
+var shipsList = [
+    {
+        "type":"airCarrier",
+        "location":[]
+    },{
+        "type":"battleship",
+        "location":[]
+    },{
+        "type":"submarine",
+        "location":[]
+    },{
+        "type":"destroyer",
+        "location":[]
+    },{
+        "type":"patrol",
+        "location":[]
     }
+]
+
+
+
+function placeShip() {
+
+    var loc = [];
+
+
+    var highCell = Array.from(document.getElementsByClassName("high"));
+
+    var cellClass = highCell.classList
+
+
+
+    highCell.forEach(ele => {console.log()});
+
+
+    highCell.forEach(e => {
+
+
+        if (e.classList.contains("ship")) {
+
+            return;
+
+        } else {
+            if (!allLoc.includes(e)) {
+
+                loc.push(e.classList[0])
+            }
+
+        }
+    })
+    
+    allLoc.forEach(el => {
+        document.getElementById('tb').querySelector(`.${el}`).classList.remove("ship");
+    })
+    allLoc = []
+    shipsList.forEach(ship => {
+        if (ship.type == type) {
+            if (loc.length == size) {
+                if (!placedType.includes(type)) {
+
+
+                    ship.location = loc;
+
+
+                }
+            }
+        }
+        allLoc = allLoc.concat(ship.location);
+    })
+
+
+
+    allLoc.forEach(el => {
+
+        document.getElementById('tb').querySelector(`.${el}`).classList.add("ship");
+
+    })
+    console.log(shipsList);
+}
+
+function postShips() {
+    for (let i =0 ; i<shipsList.length; i++) {
+        if(shipsList[i].location =! 0){
+            alert("")
+        }
+    }
+}
 
 
 
