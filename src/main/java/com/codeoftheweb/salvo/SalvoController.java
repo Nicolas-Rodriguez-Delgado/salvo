@@ -24,6 +24,8 @@ public class SalvoController {
     private PlayerRepository playerRepository;
     @Autowired
     private ShipRepository shipRepository;
+    @Autowired
+    private SalvoRepository salvoRepository;
 
 
     @RequestMapping(value ="/games")
@@ -126,8 +128,8 @@ public class SalvoController {
         gamePmap.put("gameplayer", gameplayerSet(gamePlayer.getGameID().getGamePlayerSet()));
         gamePmap.put("ships", ships(gamePlayer.getShipSet()));
         gamePmap.put("salvoes", salvoes(gamePlayer.getSalvoSet()));
-        gamePmap.put("OpponentSalvoes", salvoes(gamePlayer.getOpponentSalvo(gamePlayer)));
-        gamePmap.put("salvoHits", hits(gamePlayer));
+//        gamePmap.put("OpponentSalvoes", salvoes(gamePlayer.getOpponentSalvo(gamePlayer)));
+//        gamePmap.put("salvoHits", hits(gamePlayer));
 
         return gamePmap;
     }
@@ -258,9 +260,59 @@ public class SalvoController {
 
         }else {
 
-            gamePlayer.shipSet = ships;
+            for (Ship ship: ships){
+                gamePlayer.addShip(ship);
+                shipRepository.save(ship);
+            }
             GamePlayerRepo.save(gamePlayer);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>("Ships were created!",HttpStatus.CREATED);
         }
     }
+
+    @RequestMapping(value = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
+    public ResponseEntity<Object> saveSalvos (@PathVariable Long gamePlayerId,
+                                              @RequestBody Salvo salvo,
+                                              Authentication authentication){
+
+        GamePlayer gamePlayer = GamePlayerRepo.findGamePlayerById(gamePlayerId);
+        Player loggedPlayer = playerRepository.findByEmail(authentication.getName());
+        int lastTurn;
+        if(gamePlayer.getSalvoSet().size() != 0) {
+            Salvo lastSalvo = (Salvo) gamePlayer.getSalvoSet().toArray()[gamePlayer.getSalvoSet().size() - 1];
+            lastTurn = lastSalvo.getTurn();
+        }else lastTurn =0;
+
+
+        if(getAuthPlayer(authentication) == null ){
+
+            return new ResponseEntity<>(createMap("Error","Unathorized"), HttpStatus.UNAUTHORIZED);
+
+        }else if(loggedPlayer.getId() != gamePlayer.getPlayerID().getId()) {
+
+            return new ResponseEntity<>(createMap("Error", "Id dont match"), HttpStatus.UNAUTHORIZED);
+
+        }else if(gamePlayer == null){
+
+            return new ResponseEntity<>(createMap("Error","Null"), HttpStatus.UNAUTHORIZED);
+
+        }else {
+
+            if(lastTurn < salvo.getTurn()) {
+
+                salvoRepository.save(salvo);
+                return new ResponseEntity<>("Salvos fired!",HttpStatus.CREATED);
+
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
+        }
+
+    }
 }
+
+
+
+
+
+

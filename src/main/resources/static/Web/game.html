@@ -89,6 +89,14 @@
         .forbidden {
             background-color: red;
         }
+        .miss {
+            width: 15%;
+            display: flex;
+            justify-self: right;
+        }
+        .salvo {
+            background-color: green;
+        }
 
 
     </style>
@@ -123,7 +131,7 @@
                 <thead id="th2">
 
                 </thead>
-                <tbody id="tb2">
+                <tbody id="tb2" onclick="chooseSalvoes()">
 
                 </tbody>
 
@@ -131,9 +139,20 @@
             <br>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <img src="missile.png" class="miss">
+            <button type="button" id="fire" onclick="fireSalvo()">Fire Salvos</button>
+        </div> 
+        <div class="col">
+            <button type="button" onclick="postShips()">Start Game</button>
+            <p>To start the game all the ships must be placed!</p>
 
-    <button type="button" onclick="postShips()">Start Game</button>
-    <p>To start the game all the ships must be placed!</p>
+        </div>
+    </div>
+    
+    
+    
     <div>
         <h3>Ships</h3>
     </div>
@@ -154,7 +173,7 @@
             </div>
 
         </div>
-        <div class="col oneShip" id="sm" data-lenght="4" data-type="submarine" onclick="chooseShip(this)">
+        <div class="col oneShip" id="sm" data-lenght="3" data-type="submarine" onclick="chooseShip(this)">
             Submarine
             <div class="battle">
                 <img class="ship1" src="submarine.png">
@@ -190,6 +209,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>

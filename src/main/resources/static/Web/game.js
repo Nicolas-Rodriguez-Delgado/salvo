@@ -1,20 +1,33 @@
 var url = new URLSearchParams((window.location.search));
 var id = url.get("gp");
+var allData;
 
-$(function () {
-    fetch(`http://localhost:8080/api/game_view/${ id }`).then(function (response) {
+
+onload = (function () {
+
+
+    fetch(`http://localhost:8080/api/game_view/${ id }`).then(response => {
 
         return response.json()
 
-    }).then(function (data) {
+    }).then( data => {
         createGrid("firstTable");
         createGrid("secondTable");
-        // putShips(data);
+        putShips(data);
         // putSalvoes(data);
         // putHits(data);
-        // createShips();
-    });
+         this.allData = data;
+
+    }).catch(err => console.log(err));
+
+
+
 });
+
+
+console.log(allData);
+
+
 
 function createGrid(oneTable) {
 
@@ -43,87 +56,89 @@ function createGrid(oneTable) {
 };
 
 
-// function putShips(myData) {
-//
-//
-//     var ud = myData.gameplayer[0].player.email;
-//     document.getElementById("you").append(ud);
-//     var op = myData.gameplayer[1].player.email;
-//     document.getElementById("op").append(op);
-//
-//
-//     for (let i = 0; i < myData.ships.length; i++) {
-//
-//         var ls = myData.ships[i].locations;
-//
-//         ls.forEach(el => {
-//
-//             var sc = document.getElementById("firstTable").querySelector(`.${el}`);
-//             sc.classList.add("ship");
-//         });
-//     }
-// }
+function putShips(myData) {
 
-// function putSalvoes(myData2) {
-//
-//     var shipLocations = [];
-//     var opSalvo = [];
-//     var hits = [];
-//
-//     for (let k = 0; k < myData2.salvoes.length; k++) {
-//
-//         var locSalvo = myData2.salvoes[k].locations;
-//
-//         locSalvo.forEach(loc => {
-//             var square = document.getElementById("secondTable").querySelector(`.${loc}`);
-//             square.style.backgroundColor = "green";
-//             // square.classList.add("ship")
-//         })
-//
-//     }
-//
-//     for (let j = 0; j < myData2.ships.length; j++) {
-//
-//         myData2.ships[j].locations.forEach(el => shipLocations.push(el));
-//     }
-//
-//     for (let l = 0; l < myData2.OpponentSalvoes.length; l++) {
-//
-//         myData2.OpponentSalvoes[l].locations.forEach(el => opSalvo.push(el));
-//
-//     }
-//
-//
-//     opSalvo.forEach((loca) => shipLocations.forEach((loca2) => {
-//         var square = document.getElementById("firstTable").querySelector(`.${loca}`);
-//
-//         if (loca == loca2) {
-//             square.classList.add("hit");
-//             console.log(loca);
-//         } else {
-//             square.classList.add("noHit");
-//         }
-//
-//     }))
-//     console.log(hits);
-// }
-//
-// function putHits(myData2) {
-//
-//     for (let k = 0; k < myData2.salvoHits.length; k++) {
-//
-//         var locHits = myData2.salvoHits;
-//
-//         console.log(locHits);
-//
-//
-//         locHits.forEach(loc => {
-//             var square = document.getElementById("secondTable").querySelector(`.${loc}`);
-//             square.style.backgroundColor = "red";
-//         })
-//
-//     }
-// }
+
+    allData = myData;
+    var ud = myData.gameplayer[0].player.email;
+    document.getElementById("you").append(ud);
+    if (myData.gameplayer[1] != null) {
+        var op = myData.gameplayer[1].player.email;
+        document.getElementById("op").append(op);
+    }
+
+    for (let i = 0; i < myData.ships.length; i++) {
+
+        var ls = myData.ships[i].locations;
+
+        ls.forEach(el => {
+
+            var sc = document.getElementById("firstTable").querySelector(`.${el}`);
+            sc.classList.add("ship");
+        });
+    }
+}
+
+function putSalvoes(myData2) {
+
+    var shipLocations = [];
+    var opSalvo = [];
+    var hits = [];
+
+    for (let k = 0; k < myData2.salvoes.length; k++) {
+
+        var locSalvo = myData2.salvoes[k].locations;
+
+        locSalvo.forEach(loc => {
+            var square = document.getElementById("secondTable").querySelector(`.${loc}`);
+            square.style.backgroundColor = "green";
+            // square.classList.add("ship")
+        })
+
+    }
+
+    for (let j = 0; j < myData2.ships.length; j++) {
+
+        myData2.ships[j].locations.forEach(el => shipLocations.push(el));
+    }
+
+    for (let l = 0; l < myData2.OpponentSalvoes.length; l++) {
+
+        myData2.OpponentSalvoes[l].locations.forEach(el => opSalvo.push(el));
+
+    }
+
+
+    opSalvo.forEach((loca) => shipLocations.forEach((loca2) => {
+        var square = document.getElementById("firstTable").querySelector(`.${loca}`);
+
+        if (loca == loca2) {
+            square.classList.add("hit");
+            console.log(loca);
+        } else {
+            square.classList.add("noHit");
+        }
+
+    }))
+    console.log(hits);
+}
+
+function putHits(myData2) {
+
+    for (let k = 0; k < myData2.salvoHits.length; k++) {
+
+        var locHits = myData2.salvoHits;
+
+        console.log(locHits);
+
+
+        locHits.forEach(loc => {
+            var square = document.getElementById("secondTable").querySelector(`.${loc}`);
+            square.style.backgroundColor = "red";
+        })
+
+    }
+}
 
 
 function addClass(oneCell) {
@@ -205,23 +220,22 @@ var placedType = [];
 
 var shipsList = [
     {
-        "type":"airCarrier",
-        "location":[]
-    },{
-        "type":"battleship",
-        "location":[]
-    },{
-        "type":"submarine",
-        "location":[]
-    },{
-        "type":"destroyer",
-        "location":[]
-    },{
-        "type":"patrol",
-        "location":[]
+        "type": "airCarrier",
+        "location": []
+    }, {
+        "type": "battleship",
+        "location": []
+    }, {
+        "type": "submarine",
+        "location": []
+    }, {
+        "type": "destroyer",
+        "location": []
+    }, {
+        "type": "patrol",
+        "location": []
     }
 ]
-
 
 
 function placeShip() {
@@ -234,8 +248,9 @@ function placeShip() {
     var cellClass = highCell.classList
 
 
-
-    highCell.forEach(ele => {console.log()});
+    highCell.forEach(ele => {
+        console.log()
+    });
 
 
     highCell.forEach(e => {
@@ -253,7 +268,7 @@ function placeShip() {
 
         }
     })
-    
+
     allLoc.forEach(el => {
         document.getElementById('tb').querySelector(`.${el}`).classList.remove("ship");
     })
@@ -273,8 +288,6 @@ function placeShip() {
         allLoc = allLoc.concat(ship.location);
     })
 
-
-
     allLoc.forEach(el => {
 
         document.getElementById('tb').querySelector(`.${el}`).classList.add("ship");
@@ -283,13 +296,100 @@ function placeShip() {
     console.log(shipsList);
 }
 
-function postShips() {
-    for (let i =0 ; i<shipsList.length; i++) {
-        if(shipsList[i].location =! 0){
-            alert("")
+function checkShips() {
+
+    for (let i = 0; i < 5; i++) {
+
+        if (shipsList[i].location.length != 0) {
+
+            return true;
+
+        } else {
+            return false
         }
     }
 }
+
+function postShips() {
+
+
+    var nn = id;
+    console.log(checkShips());
+
+
+    if (checkShips()) {
+
+        $.post({
+
+            url: `/api/games/players/${id}/ships`,
+            data: JSON.stringify(this.shipsList),
+            dataType: "text",
+            contentType: "application/json"
+
+        })
+            .done(resp => {
+
+                alert("game started")
+                console.log(resp);
+                window.location.href = "game.html?gp=" + nn
+
+
+            }).catch(err => console.log(err))
+    } else {
+        alert("put all the ships")
+    }
+
+}
+
+var listSalvoes = [];
+
+function chooseSalvoes() {
+
+    document.getElementById("tb2").addEventListener("click", function handler(e) {
+
+        e.stopPropagation();
+
+        var cl = event.target.classList[0]
+
+        if (cl != listSalvoes[0] && cl != listSalvoes[0] && cl != listSalvoes[0] && listSalvoes.length < 3) {
+
+            listSalvoes.push(cl);
+            document.getElementById("tb2").querySelector(`.${cl}`).classList.add("salvo");
+
+        } else {
+            alert("Salvos ready to fire!")
+        }
+
+        console.log(listSalvoes);
+
+        this.removeEventListener("click", arguments.callee);
+
+    })
+
+
+}
+
+function fireSalvo() {
+
+
+    let turn = this.allData.salvoes.length + 1;
+    let locations = this.listSalvoes;
+
+    if (locations.length == 3) {
+        $.post({
+            url: `/api/games/players/${id}/salvoes`,
+            data: JSON.stringify({turn: turn, location: locations}),
+            dataType: "text",
+            contentType: "application/json"
+
+        }).done(res => {
+
+            location.reload();
+        })
+            .catch(err => console.log(err))
+    }
+}
+
 
 
 

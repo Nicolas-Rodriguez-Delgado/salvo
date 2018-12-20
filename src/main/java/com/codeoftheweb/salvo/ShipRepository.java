@@ -8,6 +8,6 @@ import java.util.List;
 @RepositoryRestResource
 public interface ShipRepository extends JpaRepository<Ship, Long> {
 
-//    public List<Ship> findShipByGameplayerID(GamePlayer gamePlayer);
+//     List<Ship> findShipByGameplayerID(GamePlayer gamePlayer);
 
 }
