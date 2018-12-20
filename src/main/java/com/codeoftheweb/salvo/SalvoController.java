@@ -269,7 +269,7 @@ public class SalvoController {
         }
     }
 
-    @RequestMapping(value = "/games/players/{gamePlayerId}/salvos", method = RequestMethod.POST)
+    @RequestMapping(value = "/games/players/{gamePlayerId}/salvoes", method = RequestMethod.POST)
     public ResponseEntity<Object> saveSalvos (@PathVariable Long gamePlayerId,
                                               @RequestBody Salvo salvo,
                                               Authentication authentication){
@@ -299,6 +299,7 @@ public class SalvoController {
 
             if(lastTurn < salvo.getTurn()) {
 
+                gamePlayer.addSalvo(salvo);
                 salvoRepository.save(salvo);
                 return new ResponseEntity<>("Salvos fired!",HttpStatus.CREATED);
 

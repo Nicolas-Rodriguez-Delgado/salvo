@@ -1,6 +1,5 @@
 var url = new URLSearchParams((window.location.search));
 var id = url.get("gp");
-var allData;
 
 
 onload = (function () {
@@ -14,18 +13,21 @@ onload = (function () {
         createGrid("firstTable");
         createGrid("secondTable");
         putShips(data);
-        // putSalvoes(data);
+        putSalvoes(data);
         // putHits(data);
-         this.allData = data;
+        document.getElementById("fire").addEventListener("click",function () {
+
+            fireSalvo(data);
+        })
+
 
     }).catch(err => console.log(err));
-
 
 
 });
 
 
-console.log(allData);
+
 
 
 
@@ -102,25 +104,28 @@ function putSalvoes(myData2) {
         myData2.ships[j].locations.forEach(el => shipLocations.push(el));
     }
 
-    for (let l = 0; l < myData2.OpponentSalvoes.length; l++) {
+    if (myData2.OpponentSalvoes != null) {
 
-        myData2.OpponentSalvoes[l].locations.forEach(el => opSalvo.push(el));
+        for (let l = 0; l < myData2.OpponentSalvoes.length; l++) {
 
-    }
+            myData2.OpponentSalvoes[l].locations.forEach(el => opSalvo.push(el));
 
-
-    opSalvo.forEach((loca) => shipLocations.forEach((loca2) => {
-        var square = document.getElementById("firstTable").querySelector(`.${loca}`);
-
-        if (loca == loca2) {
-            square.classList.add("hit");
-            console.log(loca);
-        } else {
-            square.classList.add("noHit");
         }
 
-    }))
-    console.log(hits);
+
+        opSalvo.forEach((loca) => shipLocations.forEach((loca2) => {
+            var square = document.getElementById("firstTable").querySelector(`.${loca}`);
+
+            if (loca == loca2) {
+                square.classList.add("hit");
+                console.log(loca);
+            } else {
+                square.classList.add("noHit");
+            }
+
+        }))
+        console.log(hits);
+    }
 }
 
 function putHits(myData2) {
@@ -360,31 +365,32 @@ function chooseSalvoes() {
             alert("Salvos ready to fire!")
         }
 
-        console.log(listSalvoes);
-
         this.removeEventListener("click", arguments.callee);
 
     })
-
-
+console.log(listSalvoes);
 }
 
-function fireSalvo() {
+function fireSalvo(allData) {
 
 
-    let turn = this.allData.salvoes.length + 1;
-    let locations = this.listSalvoes;
+    let turn = allData.salvoes.length + 1;
+    let locations = listSalvoes;
+    console.log(locations);
 
     if (locations.length == 3) {
         $.post({
             url: `/api/games/players/${id}/salvoes`,
-            data: JSON.stringify({turn: turn, location: locations}),
+            data: JSON.stringify({turn: turn, locations: locations}),
             dataType: "text",
             contentType: "application/json"
 
         }).done(res => {
 
-            location.reload();
+            alert("Salvos fired!!")
+            // window.location.href = "game.html?gp=" + id
+
+
         })
             .catch(err => console.log(err))
     }
